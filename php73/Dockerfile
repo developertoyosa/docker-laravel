@@ -1,5 +1,5 @@
 #imagen base
-FROM php:7.3-stretch
+FROM php:7.3-bullseye
 
 #carpeta predeterminada
 WORKDIR /project
@@ -28,13 +28,14 @@ RUN apt-get update \
     libjpeg62-turbo-dev \
     libmcrypt-dev
 
+COPY libltdl.la /usr/lib/x86_64-linux-gnu/libltdl.la
 #instala llave para repositorio microsoft requisito(gnupg, gnupg1, gnupg2)
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
 RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools
 RUN apt-get install unixodbc-dev -y
-RUN pecl install sqlsrv pdo_sqlsrv
+RUN pecl install sqlsrv-5.9.0 pdo_sqlsrv-5.9.0
 
 #Configura zip
 #RUN docker-php-ext-configure zip --with-zlib-dir
