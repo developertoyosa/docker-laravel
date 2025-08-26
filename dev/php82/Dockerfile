@@ -2,9 +2,9 @@
 FROM php:8.2.18-bookworm
 
 #carpeta predeterminada
-WORKDIR /project
+WORKDIR /app
 
-RUN useradd -d /project userapp -s /bin/bash
+RUN useradd -d /app userapp -s /bin/bash
 
 #Desactivar modo interactivo
 #ARG DEBIAN_FRONTEND=noninteractive

@@ -1,17 +1,16 @@
 #imagen base
-FROM php:7.2-zts-stretch
+FROM php:7.3-bullseye
 
 #carpeta predeterminada
-WORKDIR /project
+WORKDIR /app
 
-RUN useradd -d /project userapp -s /bin/bash
+RUN useradd -d /app userapp -s /bin/bash
 
 #Desactivar modo interactivo
 #ARG DEBIAN_FRONTEND=noninteractive
 
 #Actualizar repositorio, instalar apt-utils, zip, git
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     zip \
     nano \
     locate \
@@ -26,15 +25,20 @@ RUN apt-get update \
     net-tools \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
-    libmcrypt-dev
+    libmcrypt-dev \
+    rsync \
+    openssh-client \
+    && rm -rf /var/lib/apt/lists/*
 
+
+COPY libltdl.la /usr/lib/x86_64-linux-gnu/libltdl.la
 #instala llave para repositorio microsoft requisito(gnupg, gnupg1, gnupg2)
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
 RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools
 RUN apt-get install unixodbc-dev -y
-RUN pecl install sqlsrv pdo_sqlsrv
+RUN pecl install sqlsrv-5.9.0 pdo_sqlsrv-5.9.0
 
 #Configura zip
 #RUN docker-php-ext-configure zip --with-zlib-dir
@@ -61,7 +65,7 @@ RUN pecl install -f xdebug-3.1.6 \
 && echo "#zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so) \nxdebug.mode=debug \nxdebug.start_with_request=yes \nxdebug.discover_client_host=1 \nxdebug.client_port=9003 \nxdebug.log='/tmp/xdebug.log' \nxdebug.client_host=host.docker.internal" > /usr/local/etc/php/conf.d/xdebug.ini;
 
 #Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh && bash nodesource_setup.sh && apt-get -y install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh && bash nodesource_setup.sh && apt-get -y install nodejs
 
 #Copia archivo de configuración para desarrollo
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
