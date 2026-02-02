@@ -1,5 +1,5 @@
 #imagen base
-FROM php:8.2.18-bookworm
+FROM php:8.2-trixie
 
 #carpeta predeterminada
 WORKDIR /app
@@ -11,17 +11,20 @@ RUN useradd -d /app userapp -s /bin/bash
 
 #Actualizar repositorio, instalar apt-utils, zip, git
  RUN apt-get update \
-     && apt-get install -y \
-     zip \
-     nano \
-     locate \
-     gnupg 
-#     zlib1g-dev \
-#     libzip-dev \
+    && apt-get install -y \
+    zip \
+    unzip \ 
+    vim \
+    locate \
+    gnupg \
+    zlib1g-dev \
+    libzip-dev\
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev 
 #     libxml++2.6-dev \
 #     git \
 #     net-tools \
-#     libfreetype6-dev \
 #     libjpeg62-turbo-dev \
 #     libmcrypt-dev
 
@@ -36,13 +39,11 @@ RUN ACCEPT_EULA=Y apt-get install -y msodbcsql18
 RUN apt-get install -y unixodbc-dev
 RUN pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0
 
-#Configura zip
-#RUN docker-php-ext-configure zip --with-zlib-dir
+#Configura extensiones zip y GD
+RUN docker-php-ext-configure zip && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg
 
-# #Instala y Configura GD
-# RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
-
-RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-enable sqlsrv pdo_sqlsrv
+RUN docker-php-ext-install pdo gd zip pdo_mysql && docker-php-ext-enable sqlsrv pdo_sqlsrv
 
 #Instalar composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
@@ -60,7 +61,7 @@ RUN pecl install -f xdebug-3.3.2 \
  && echo "#zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so) \nxdebug.mode=debug \nxdebug.start_with_request=yes \nxdebug.discover_client_host=1 \nxdebug.client_port=9003 \nxdebug.log='/tmp/xdebug.log' \nxdebug.client_host=host.docker.internal" > /usr/local/etc/php/conf.d/xdebug.ini;
 
 #Install nodejs 20.x
-RUN curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh && bash nodesource_setup.sh && apt-get -y install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_24.x -o nodesource_setup.sh && bash nodesource_setup.sh && apt-get -y install nodejs
 
 #Copia archivo de configuración para desarrollo
 RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
