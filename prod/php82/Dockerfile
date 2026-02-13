@@ -11,6 +11,7 @@ WORKDIR /app
 
 #Actualizar repositorio, instalar apt-utils, zip
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssh-client \
     zip \
     unzip \ 
     vim \
