@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     libfreetype6-dev \ 
     git \
+    lftp \
     rsync \
     && rm -rf /var/lib/apt/lists/*
 
