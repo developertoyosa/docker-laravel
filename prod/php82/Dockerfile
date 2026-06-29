@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfreetype6-dev \ 
     git \
     lftp \
+    rclone \
     rsync \
     && rm -rf /var/lib/apt/lists/*
 
