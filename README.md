@@ -29,19 +29,19 @@ Navegar a la carpeta que se desea crear la imagen
 Crear la imagen docker, validando que todo este en buen funcionamiento
 
 Ejemplo (dev)
-`docker build -t developertoyosa/laravel:x.yy-phpx.y-dev .`
+`docker build -t developertoyosa/laravel:xx-phpx.y-dev .`
 
 Ejemplo (test-prod)
-`docker build -t developertoyosa/laravel:x.yy-phpx.y .`
+`docker build -t developertoyosa/laravel:xx-phpx.y .`
 
 
 > #### Crear un docker de prueba
 
 Ejemplo (dev)
-`docker run --rm -it --name docker-build-test -v $(pwd):/app developertoyosa/laravel:x.yy-phpx.y-dev`
+`docker run --rm -it --name docker-build-test -v $(pwd):/app developertoyosa/laravel:xx-phpx.y-dev`
 
 Ejemplo (test-prod)
-`docker run -it --rm --name docker-build-test -v $(pwd):/app developertoyosa/laravel:x.yy-phpx.y`
+`docker run -it --rm --name docker-build-test -v $(pwd):/app developertoyosa/laravel:xx-phpx.y`
 
 
 > #### Publicar docker 
@@ -49,10 +49,10 @@ Ejemplo (test-prod)
 `docker login`
 
 Ejemplo (dev)
-`docker push developertoyosa/laravel:x.yy-phpx.y-dev`
+`docker push developertoyosa/laravel:xx-phpx.y-dev`
 
 Ejemplo (test-prod)
-`docker push developertoyosa/laravel:x.yy-phpx.y`
+`docker push developertoyosa/laravel:xx-phpx.y`
 
 > ## Verificación de versiones
 `php -v`
