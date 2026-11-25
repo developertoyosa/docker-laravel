@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN docker-php-ext-configure zip && \
     docker-php-ext-configure gd --with-freetype --with-jpeg
 
-RUN docker-php-ext-install pdo gd zip pdo_mysql
+RUN docker-php-ext-install bcmath pdo gd zip pdo_mysql
 
 #Instalar composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \

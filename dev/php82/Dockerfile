@@ -43,7 +43,7 @@ RUN pecl install opentelemetry sqlsrv-5.12.0 pdo_sqlsrv-5.12.0
 RUN docker-php-ext-configure zip && \
     docker-php-ext-configure gd --with-freetype --with-jpeg
 
-RUN docker-php-ext-install pdo gd zip pdo_mysql && docker-php-ext-enable opentelemetry sqlsrv pdo_sqlsrv
+RUN docker-php-ext-install bcmath pdo gd zip pdo_mysql && docker-php-ext-enable opentelemetry sqlsrv pdo_sqlsrv
 
 #Instalar composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
